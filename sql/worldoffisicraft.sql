@@ -1,4 +1,4 @@
-DROP TABLE heroes;
+DROP TABLE IF EXISTS heroes;
 
 CREATE TABLE heroes 
 (

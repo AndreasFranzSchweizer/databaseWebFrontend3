@@ -1,4 +1,4 @@
-DROP TABLE pvpower;
+DROP TABLE IF EXISTS pvpower;
 
 CREATE TABLE pvpower 
 (
