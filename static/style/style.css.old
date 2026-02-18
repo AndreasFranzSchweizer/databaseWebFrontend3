@@ -1,0 +1,138 @@
+* {
+    font-family:Roboto,Ubuntu,Arial,sans-serif;
+}
+header {
+    display:flex;
+    justify-content: space-between;
+}
+
+header img{
+    height: 10vh;
+    max-height: 114px
+}
+nav {
+    margin:1em 0 ;
+    padding:0.5em 0;
+    border-top:2px #909090 solid;
+    border-bottom:2px #909090 solid;
+
+}
+nav a {
+    text-decoration: none;
+    color: #909090;
+}
+
+main {
+    max-width: 80em;
+    margin:1rem auto;
+    padding:1em;
+    border:1px solid green;
+    min-height: 90vh;
+
+}
+
+h1 {
+    font-size: 133%;
+}
+
+h2 {
+    font-size: 110%
+}
+
+#tasql {
+    resize: none;
+    width:100%;
+}
+
+button {
+    margin:1em 0;
+}
+
+
+.fehler {
+    color:red;
+}
+
+#info {
+    display:flex;
+    justify-content: space-between
+}
+
+#info span{
+    margin-left:1em;
+    display:block;
+}
+#info span:first-child{
+    margin-left:0;
+    color:green;
+    font-weight: bold;
+    cursor: default;
+    margin-bottom: 0.4rem;
+}
+
+table#info span{
+    display: block;
+}
+
+#divlimit{
+    display:inline-flex;
+    align-items: center;
+    margin-left:1em;
+    width:30em;
+    justify-content: space-around;
+}
+pre,textarea {
+    font-family: monospace;
+}
+
+#table-wrapper {
+    max-width:100%;
+    overflow:auto;
+}
+
+#tblresult {
+    border-spacing: 0;
+    border:1px solid gray;
+}
+
+#tblresult tbody td{
+    padding:0.3ex 1ex;
+    background-color: white;
+    border-width:0 1px;
+    border-style:solid;
+    border-color:#eeeeee;
+
+}
+
+#tblresult tr:nth-child(even) td{
+    background-color: #e9fdea;
+}
+
+
+#tblresult thead td {
+    font-weight: bold;
+    background-color: green;
+    color:white;
+    padding:1ex;
+}
+
+select {
+    padding:0.5rem;
+    background:white;
+    border:1px solid gray;
+    margin-left: 1rem;
+    color:green;
+    font-weight: bolder;
+    font-size:1.2rem;
+}
+
+#btnanwenden {
+    border:2px solid green;
+    background:white;
+    padding:0.5rem;
+}
+
+#btnanwenden:hover,select:hover,#info span:first-child:hover{
+    color:white;
+    background: green;
+}

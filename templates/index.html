@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <title>Datenbanken Online</title>
+    <link rel="icon" type="image/vnd.microsoft.icon" href="/favicon.ico">
+    <link rel="stylesheet" href="style/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+    <script src="js/app.js"></script>
+
+
+</head>
+
+<body onload='start()'>
+    <main id='app'>
+        <aside>
+            <h2><label for="seldatabase">Datenbankwahl</label></h2>
+            <div ref="get_database" hidden>{{get_database}}</div>
+            <select id="seldatabase" v-model='actualDatabase'>
+                <option v-for="d in databases">[[d]]</option>
+            </select>
+
+            <div id="info">
+                <div v-for='table in tables' class='databasedetails'>
+                    <details>
+                        <summary>[[table.tablename]] </summary>
+                        <ul>
+                            <li v-for='col in table.columns'>[[col]]</li>
+                        </ul>
+                    </details>
+                    <span @click='viewData(table.tablename)'>&#9432;</span>
+                </div>
+            </div>
+        </aside>
+        <section>
+            <div>
+                <h1>Datenbanken online abfragen </h1>
+                <p>Auf dieser Seite kannst Du SELECT-Befehle auf Beispieldatenbanken von mir loslassen.
+                    Du hast keine Schreibrechte in den Datenbanken, kannst also nichts ändern oder einfügen.
+                </p>
+                <h2><label for='tasql' @click='sql=""'>SQL</label> </h2>
+                <div>
+                    <div ref='get_sql' hidden>{{get_sql}}</div>
+                    <textarea id='tasql' v-model='sql' rows=7 spellcheck="false"></textarea>
+                    <button id='btnanwenden' @click='sendSql()'>&#9654; SQL ausführen</button>
+                </div>
+            </div>
+            <div v-if="antwort && antwort.sql" id='antwort'>
+                <div>
+                    <pre>[[antwort.sql]]</pre>
+                </div>
+                <div v-if="antwort.data" id="tablewrapper">
+                    <!-- für overflow -->
+                    <table id="tblresult">
+                        <thead>
+                            <tr>
+                                <td v-for="col in antwort.columns">[[col]]</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="line in antwort.data">
+                                <td v-for="cell in line">[[cell]]</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div v-else>
+                    <p>In Deinem SQL-Befehl war ein Fehler:</p>
+                    <pre class='fehler'>[[antwort.sqlError]]</pre>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+
+</html>

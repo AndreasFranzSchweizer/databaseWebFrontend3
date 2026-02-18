@@ -1,0 +1,78 @@
+
+-- Beispieldatenbank Fahrradverleih
+--Die folgenden Zeilen auskommentieren, wenn Du die Datei mit
+-- psql einspielst
+--CREATE DATABASE fahrradverleih
+--\c fahrradverleih
+
+DROP TABLE IF EXISTS verleih,kunde,rad,preis,typ;
+
+CREATE TABLE typ (
+    nr INT PRIMARY KEY,
+    typname VARCHAR(80)
+);
+
+CREATE TABLE preis (
+    kategorie INT PRIMARY KEY,
+    stundenpreis DECIMAL(5,2) DEFAULT 10.0
+);
+
+CREATE TABLE rad(
+    nr INT PRIMARY KEY,
+    typ INT REFERENCES typ(nr),
+    farbe VARCHAR(30),
+    preiskategorie INT REFERENCES preis(kategorie)
+);
+
+CREATE TABLE kunde(
+    nr INT PRIMARY KEY,
+    nickname VARCHAR(120),
+    IBAN VARCHAR(34)
+
+);
+CREATE TABLE verleih(
+    nr INT PRIMARY KEY,
+    rad INT REFERENCES rad(nr),
+    kunde INT REFERENCES kunde(nr),
+    von TIMESTAMP,
+    bis TIMESTAMP
+
+);
+
+INSERT INTO typ VALUES 
+(1,'Rennrad'),
+(2,'City-Bike'),
+(3,'Mountainbike'),
+(4,'Fixie'),
+(5,'Gravel-Bike'),
+(6,'Liegerade'),
+(7,'E-Mountainbike'),
+(8,'E-City-Bike')
+;
+
+INSERT INTO preis VALUES
+(1,8),(2,8.5),(3,9),(4,9.8);
+
+
+INSERT INTO rad VALUES
+(4,2,'rot',1),(5,2,'gelb',1),(6,1,'rosa',2),(7,3,'malve',4)
+;
+INSERT INTO kunde VALUES
+(1,'mr_x','DE90823234324324'),
+(2,'jinjo','DE90823234234324'),
+(3,'schnecki','DE90283234324324'),
+(40,'schnuppo','DE5323423423423'),
+(41,'miss_y','DE5323421423423'),
+(42,'lill','DE5323421423421'),
+(43,'binus','DE1323421423421')
+;
+
+INSERT INTO verleih VALUES
+(1,5,1,'2019-05-04 13:22','2019-05-04 13:30'),
+(2,4,3,'2019-05-07 22:13','2019-05-08 3:13'),
+(3,6,2,'2019-01-01 08:04','2019-01-17 14:12');
+
+--INSERT INTO verleih 
+--SELECT generate_series(4, 200) ,'2019-01-01' + RANDOM
+-- CREATE VIEW zufallsdauer AS (select  ((random()*24*365)::INT||' hour')::INTERVAL AS dauer);
+-- CREATE VIEW zufallsdatum AS (select '2019-1-1'::DATE+interval AS datum from zufallsdauer);

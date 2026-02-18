@@ -1,0 +1,115 @@
+/* 
+ FÜR POSTGRES
+*/
+DROP TABLE IF EXISTS nutzung,kunde,episode,serie;
+
+
+CREATE TABLE serie (
+ nr SERIAL PRIMARY KEY,
+ titel VARCHAR(120),
+ altersfreigabe INT,
+ sprache VARCHAR(20) DEFAULT 'deutsch' 
+);
+
+
+CREATE TABLE episode (
+ nr SERIAL PRIMARY KEY,
+ serie INTEGER REFERENCES serie(nr),
+ staffel INTEGER,
+ episodennr INTEGER,
+ titel VARCHAR(120) DEFAULT 'ohne Titel',
+ verfoeffentlicht DATE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE kunde (
+ kundennr SERIAL PRIMARY KEY,
+ name VARCHAR(80),
+ "alter" INTEGER
+);
+
+CREATE TABLE nutzung (
+ id SERIAL PRIMARY KEY,
+ episode INTEGER REFERENCES episode(nr),
+ kundennr INTEGER REFERENCES kunde(kundennr),
+ zeitpunkt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+/*
+CREATE TABLE sprache (
+ code VARCHAR(4) PRIMARY KEY,
+ bezeichnung VARCHAR(20)
+);
+
+CREATE verfuegbaresprache (
+  id INTEGER PRIMARY KEY,
+  sprache VARCHAR(4) REFERENCES sprache(code),
+  serie INTEGER REFERENECES serie(nr)
+);
+*/
+
+
+INSERT INTO serie (titel,altersfreigabe) VALUES
+  ('Admin wider Willen',12),('Ein Admin kommt selten allein',18),('Verloren auf Java',0),
+  ('UMLegen war ihr Hobby',18)
+;
+INSERT INTO serie (titel,altersfreigabe,sprache) VALUES
+  ('A year on SQL-Island',12,'english'),('Administrador Viejo',0,'espanol')
+;
+INSERT INTO kunde (name,"alter") VALUES
+('Tick',10),('Trick',10),('Track',10),('Donald',32),('Dagobert',67),('Geralt',94);
+;
+
+INSERT INTO episode (serie,staffel,episodennr) VALUES 
+(1,1,1),(1,1,2),(1,1,3),(1,1,4),(1,1,5),
+(1,2,1),(1,2,2),(1,2,3),(1,2,4),
+(1,3,1),(1,3,2),(1,3,3),(1,3,4),(1,3,5),(1,3,6),
+(2,1,1),(2,1,2),(2,1,3),(2,1,4),(2,1,5),
+(2,2,1),(2,2,2),(2,2,3),(2,2,4),
+(3,1,1),(3,1,2),(3,1,3),(3,1,4),
+(3,2,1),(3,2,2),(3,2,3),(3,2,4),(3,2,5),
+(4,1,1),(4,1,2),(4,1,3),(4,1,4),(4,1,5),(4,1,6),
+(5,1,1),(5,1,2),(5,1,3),(5,1,4),(5,1,5),(5,1,6),(5,1,7),
+(5,2,1),(5,2,2),(5,2,3),(5,2,4),(5,2,5),
+(6,1,1),(6,1,2),(6,1,3),(6,1,4),(6,1,5),(6,1,6),
+(6,2,1),(6,2,2),(6,2,3),(6,2,4),(6,2,5),(6,2,6),
+(6,3,1),(6,3,2),
+(6,4,1),(6,5,1)
+;
+
+CREATE OR REPLACE FUNCTION zufall (von INT,bis INT)
+RETURNS INT
+LANGUAGE plpgsql
+AS $$
+BEGIN
+   RETURN FLOOR(RANDOM()*(bis-von+1)+von);
+END;
+$$;	
+
+CREATE OR REPLACE FUNCTION zufallszeit ()
+RETURNS TIMESTAMP
+LANGUAGE plpgsql
+AS $$
+BEGIN
+   RETURN NOW()+  (FLOOR((0-5-RANDOM())*1000000)||' minutes')::INTERVAL;
+END;
+$$;
+
+INSERT INTO nutzung (kundennr,episode,zeitpunkt)
+ SELECT 4,nr, zufallszeit() FROM episode;
+
+INSERT INTO nutzung (kundennr,episode,zeitpunkt)
+ SELECT 1,zufall(1,67),zufallszeit() FROM episode LIMIT 30;
+ 
+
+INSERT INTO nutzung (kundennr,episode,zeitpunkt)
+ SELECT 2,zufall(1,67), zufallszeit() FROM episode LIMIT 10;
+
+INSERT INTO nutzung (kundennr,episode,zeitpunkt)
+ SELECT 3,serie.nr,zufallszeit() FROM episode
+ JOIN serie ON serie = serie.nr
+WHERE altersfreigabe<=10;
+
+INSERT INTO nutzung (kundennr,episode,zeitpunkt)
+ SELECT 5,zufall(1,67),zufallszeit() FROM episode LIMIT 25;
+
+
