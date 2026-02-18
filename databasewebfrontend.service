@@ -1,0 +1,17 @@
+[Unit]
+Description=Database Web Frontend (gunicorn)
+After=network.target postgresql.service
+
+[Service]
+WorkingDirectory=/opt/databaseWebFrontend3
+Environment=PGHOST=localhost
+Environment=PGUSER=webfrontend
+Environment=PGPASSWORD=web
+
+ExecStart=/opt/databaseWebFrontend3/venv/bin/gunicorn -w 2 -b 0.0.0.0:8080 serv>
+
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=multi-user.target
